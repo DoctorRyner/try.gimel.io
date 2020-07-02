@@ -16,12 +16,32 @@ extra-source-files:
 # common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/githubuser/try.gimel.io/api#readme>
 
+ghc-options:
+- -Wall
+- -Wno-name-shadowing
+- -Wno-unused-do-bind
+- -Werror=incomplete-patterns
+- -F -pgmF=record-dot-preprocessor
+
+default-extensions:
+- OverloadedStrings
+- LambdaCase
+- DataKinds
+- TemplateHaskell
+- TypeOperators
+- DuplicateRecordFields
+- QuasiQuotes
+- OverloadedStrings
+
 dependencies:
 - base >= 4.7 && < 5
 - aeson
 - servant-server
 - wai
 - warp
+- text
+- record-hasfield
+
 
 library:
   source-dirs: src
