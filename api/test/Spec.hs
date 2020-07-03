@@ -9,10 +9,10 @@ main :: IO ()
 main = hspec spec
 
 spec :: Spec
-spec = with (return app) $ do
-    describe "GET /api/compile" $ do
-        it "responds with 200" $ do
-            get "/api/compile" `shouldRespondWith` 200
-        it "responds with String" $ do
-            let result = "hello world"
-            get "/api/compile" `shouldRespondWith` result
+spec = with (return app)
+  $ describe "GET /api/compile"
+  $ do
+    it "responds with 200" $
+      get "/api/compile" `shouldRespondWith` 200
+    it "responds with NoContent" $
+      get "/api/compile" `shouldRespondWith` ""
