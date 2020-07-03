@@ -27,6 +27,7 @@ default-extensions:
 - OverloadedStrings
 - LambdaCase
 - DataKinds
+- DeriveGeneric
 - TemplateHaskell
 - TypeOperators
 - DuplicateRecordFields
@@ -38,6 +39,7 @@ dependencies:
 - aeson-pretty
 - bytestring
 - lens
+- servant
 - servant-server
 - wai
 - warp

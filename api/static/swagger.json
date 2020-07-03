@@ -1,0 +1,25 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.1",
+        "title": "Playground API",
+        "description": "Returns a compiled JS code to be executed in a sandbox"
+    },
+    "paths": {
+        "/api/compile": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": ""
+                    }
+                },
+                "produces": [
+                    "text/plain;charset=utf-8"
+                ]
+            }
+        }
+    }
+}

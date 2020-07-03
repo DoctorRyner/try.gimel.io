@@ -1,6 +1,12 @@
 module Main where
 
-import App
+import           App
 
 main :: IO ()
-main = startApp
+main = do
+    args <- getArgs
+    case args of
+        ("swagger:update-schema":_) ->
+            -- writeSwaggerJSON
+            startApp
+        _ startApp
