@@ -1,13 +1,8 @@
-module App
-  ( startApp
-  , app
-    -- , writeSwaggerJSON
-  )
-where
+module App where
 
 import           Control.Lens
-import           Data.Aeson.Encode.Pretty       ( encodePretty )
-import qualified Data.ByteString.Lazy.Char8    as BL8
+import           Data.Aeson.Encode.Pretty          (encodePretty)
+import qualified Data.ByteString.Lazy.Char8 as BL8
 import           Data.Swagger
 
 import           Network.Wai
@@ -18,17 +13,17 @@ import           Servant.Swagger
 import           Servant.API.Generic
 import           Servant.Server.Generic
 
--- , _swagger :: route :- "swagger.json" :> Get '[JSON] Swagger
-
 data Routes route = Routes
-  { _compile :: route :- "api" :> "compile" :> Get '[PlainText] String
-  , _static :: route :- "static" :> Raw
-  } deriving (Generic)
+  { compile :: route :- "api" :> "compile" :> Get '[JSON] NoContent
+  , static  :: route :- "static" :> Raw
+  }
+  deriving Generic
 
 routes :: Routes AsServer
-routes = Routes { _compile = return "hello world"
-                , _static  = serveDirectoryFileServer "static"
-                }
+routes = Routes
+  { compile = return NoContent
+  , static  = serveDirectoryFileServer "static"
+  }
 
 api :: Proxy (ToServantApi Routes)
 api = genericApi (Proxy :: Proxy Routes)
@@ -40,7 +35,6 @@ startApp :: IO ()
 startApp = do
   putStrLn "Server is running on port: 8080"
   run 8080 app
-
 
 -- swagger :: Swagger
 -- swagger =

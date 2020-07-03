@@ -21,7 +21,6 @@ ghc-options:
 - -Wno-name-shadowing
 - -Wno-unused-do-bind
 - -Werror=incomplete-patterns
-- -F -pgmF=record-dot-preprocessor
 
 default-extensions:
 - OverloadedStrings
@@ -47,7 +46,6 @@ dependencies:
 - record-hasfield
 - servant-swagger
 - swagger2
-
 
 library:
   source-dirs: src
