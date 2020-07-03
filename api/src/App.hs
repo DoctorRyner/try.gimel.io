@@ -1,24 +1,58 @@
 module App
     ( startApp
     , app
-    ) where
+    , writeSwaggerJSON
+    )
+where
 
-import Data.Aeson
-import Data.Aeson.TH
-import Network.Wai
-import Network.Wai.Handler.Warp
-import Servant
+import           Control.Lens
+import           Data.Aeson.Encode.Pretty       ( encodePretty )
+import qualified Data.ByteString.Lazy.Char8    as BL8
+import           Data.Swagger
+import           Network.Wai
+import           Network.Wai.Handler.Warp
+import           Servant
+import           Servant.Swagger
 
-type API = "api" :> "compile" :> Get '[PlainText] String
+type CompilationAPI = "api" :> "compile" :> Get '[PlainText] String
 
-startApp :: IO ()
-startApp = run 8080 app
+type SwaggerAPI = "swagger.json" :> Get '[JSON] Swagger
 
-app :: Application
-app = serve api server
+type StaticAPI = "static" :> Raw
+
+type API = SwaggerAPI :<|> CompilationAPI :<|> StaticAPI
+
+compilationApi :: Proxy CompilationAPI
+compilationApi = Proxy
+
+swagger :: Swagger
+swagger =
+    toSwagger compilationApi
+        &  info
+        .  title
+        .~ "Playground API"
+        &  info
+        .  version
+        .~ "0.1"
+        &  info
+        .  description
+        ?~ "Returns a compiled JS code to be executed in a sandbox"
+
+server :: Server API
+server = return swagger :<|> return "hello world" :<|> serveDirectoryFileServer
+    "static"
 
 api :: Proxy API
 api = Proxy
 
-server :: Server API
-server = return "hello world"
+app :: Application
+app = serve api server
+
+startApp :: IO ()
+startApp = do
+    putStrLn "Server is running on port: 8080"
+    run 8080 app
+
+-- | Output generated @swagger.json@ file for the @'CompilationAPI'@.
+writeSwaggerJSON :: IO ()
+writeSwaggerJSON = BL8.writeFile "/static/swagger.json" (encodePretty swagger)
