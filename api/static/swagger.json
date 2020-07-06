@@ -5,21 +5,55 @@
         "title": "Playground API",
         "description": "Returns a compiled JS code to be executed in a sandbox"
     },
+    "definitions": {
+        "Code": {
+            "example": {
+                "code": "main = putStrLn \"hello world\""
+            },
+            "required": [
+                "code"
+            ],
+            "type": "object",
+            "description": "Purescript or JS compied code is supplied withhing the `code` field",
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        }
+    },
     "paths": {
         "/api/compile": {
-            "get": {
+            "post": {
+                "consumes": [
+                    "application/json;charset=utf-8"
+                ],
                 "responses": {
+                    "400": {
+                        "description": "Invalid `body`"
+                    },
                     "200": {
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/Code"
                         },
                         "description": ""
                     }
                 },
                 "produces": [
-                    "text/plain;charset=utf-8"
+                    "application/json;charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Code"
+                        },
+                        "in": "body",
+                        "name": "body"
+                    }
                 ]
             }
-        }
+        },
+        "/static": {}
     }
 }
